@@ -34,9 +34,6 @@ export const getEmployeeById = async (req: Request, res: Response) => {
 
 export const createEmployee = async (req: Request, res: Response) => {
     const { name, role } = req.body
-    if (!name || !role) {
-        return res.status(400).json({ error: 'Name and role are required' })
-    }
     try {
         const employee = await prisma.employee.create({ data: { name, role } })
         res.json(employee)
