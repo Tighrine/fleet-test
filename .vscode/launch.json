@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug back",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/back/dist/server.js",
+      "outFiles": ["${workspaceFolder}/back/dist/**/*.js"]
+    }
+  ]
+}

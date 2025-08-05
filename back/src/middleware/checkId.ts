@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
 export function checkId(req: Request, res: Response, next: NextFunction) {
-    console.log("Validating employee ID: ", req.params);
   const { id } = req.params;
 
   if (!id || isNaN(Number(id))) {

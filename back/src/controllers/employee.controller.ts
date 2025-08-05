@@ -45,9 +45,6 @@ export const createEmployee = async (req: Request, res: Response) => {
 export const updateEmployee = async (req: Request, res: Response) => {
     const { id } = req.params
     const { name, role } = req.body
-    if (!id || !name || !role) {
-        return res.status(400).json({ error: 'Employee ID, name, and role are required' })
-    }
     try {
         let employee = await prisma.employee.findUnique({ where: { id: Number(id) } })
         if (!employee) {

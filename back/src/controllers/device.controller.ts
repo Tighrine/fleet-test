@@ -38,9 +38,6 @@ export const getDeviceById = async (req: Request, res: Response) => {
 export const createDevice = async (req: Request, res: Response) => {
     const { name, type, ownerId } = req.body
     try {
-        if (!name || !type || !ownerId) {
-            throw new AppError(400, 'Name, type, and owner ID are required')
-        }
         const device = await prisma.device.create({ data: { name, type, ownerId } })
         if (!device) {
             throw new AppError(400, 'Failed to create device')
