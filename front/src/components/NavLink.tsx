@@ -1,19 +1,32 @@
+import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Link } from "react-router-dom";
 
 type NavLinkProps = {
-    to: string;
-    children: React.ReactNode;
-    icon?: React.ReactNode;
-    activePathname?: string;
+  to: string;
+  children: React.ReactNode;
+  icon?: React.ReactNode;
+  selected?: boolean;
 };
 
-function NavLink({ to, children, icon, activePathname }: NavLinkProps) {
-    return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.5rem' }}>
-            {icon}
-            <Link to={to} style={{ fontWeight: activePathname === to ? 'bold' : 'normal' }} >{children}</Link>
-        </div>
-    )
+function NavLink({ to, children, icon, selected }: NavLinkProps) {
+  return (
+    <Link to={to} style={{ textDecoration: "none", color: "inherit" }}>
+      <ListItemButton
+        selected={selected}
+        sx={{
+          "&.Mui-selected": {
+            backgroundColor: "#f4f4f5",
+          },
+          "&.Mui-focusVisible": {
+            backgroundColor: "#f4f4f5",
+          },
+        }}
+      >
+        <ListItemIcon>{icon}</ListItemIcon>
+        <ListItemText>{children}</ListItemText>
+      </ListItemButton>
+    </Link>
+  );
 }
 
-export default NavLink
+export default NavLink;
