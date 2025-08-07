@@ -4,5 +4,5 @@ export const DeviceSchema = z.object({
   id: z.uuid().optional(),
   name: z.string().min(1, 'Name is required'),
   type: z.string().min(1, 'Type is required'),
-  ownerId: z.uuid('Invalid Owner ID').optional(),
+  ownerId: z.union([z.uuid('Invalid Owner ID'), z.null()]).optional(),
 });

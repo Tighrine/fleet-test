@@ -9,6 +9,8 @@ import {
   Select,
   InputLabel,
   FormHelperText,
+  Typography,
+  Divider,
 } from "@mui/material";
 
 import { useForm, Controller } from "react-hook-form";
@@ -39,16 +41,8 @@ export const UpsertDeviceDialog: React.FC<UpsertDeviceDialogProps> = ({
     formState: { errors },
   } = useForm<Device>();
 
-  const {
-    mutate: createDevice,
-    error: createError,
-    isError: isCreateError,
-  } = useCreateDevice();
-  const {
-    mutate: updateDevice,
-    error: updateError,
-    isError: isUpdateError,
-  } = useUpdateDevice();
+  const { mutate: createDevice } = useCreateDevice();
+  const { mutate: updateDevice } = useUpdateDevice();
 
   useEffect(() => {
     if (open) {
@@ -58,7 +52,7 @@ export const UpsertDeviceDialog: React.FC<UpsertDeviceDialogProps> = ({
         reset({
           name: "",
           type: "",
-          ownerId: undefined,
+          owner: { id: "none" },
         });
       }
     }
@@ -69,22 +63,23 @@ export const UpsertDeviceDialog: React.FC<UpsertDeviceDialogProps> = ({
     onClose();
   };
 
-  const submitHandler = async (data: Device) => {
+  const submitHandler = async (data: Device & { ownerId?: string | null }) => {
+    if (data.owner?.id && data.owner.id !== "none") {
+      data = {
+        ...data,
+        ownerId: data.owner.id,
+      };
+    } else {
+      data.ownerId = null; // Ensure ownerId is null if no owner is selected
+    }
+    delete data.owner;
     if (device) {
       await updateDevice({
         id: device.id!,
         data,
       });
-      if (isUpdateError) {
-        console.error("Error updating device:", updateError);
-        return;
-      }
     } else {
       await createDevice(data);
-      if (isCreateError) {
-        console.error("Error creating device:", createError);
-        return;
-      }
     }
     handleClose();
   };
@@ -156,20 +151,16 @@ export const UpsertDeviceDialog: React.FC<UpsertDeviceDialogProps> = ({
             )}
           />
           <Controller
-            name="ownerId"
+            name="owner.id"
             control={control}
             defaultValue={"none"}
             render={({ field }) => (
               <>
-                <CustomFormControl
-                  fullWidth
-                  margin="normal"
-                  error={!!errors.ownerId}
-                >
+                <CustomFormControl fullWidth margin="normal">
                   <InputLabel id="owner-label">Owner</InputLabel>
                   <Select {...field} labelId="owner-label" label="Owner">
-                    <MenuItem key={"none-owner"} value={"none"}>
-                      <em>Unassign</em>
+                    <MenuItem value="none" aria-placeholder="Select Owner">
+                      <Typography color="textDisabled">Select Owner</Typography>
                     </MenuItem>
                     {owners?.map((owner) => (
                       <MenuItem key={owner.id} value={owner.id}>
@@ -178,18 +169,11 @@ export const UpsertDeviceDialog: React.FC<UpsertDeviceDialogProps> = ({
                     ))}
                   </Select>
                 </CustomFormControl>
-                {errors.ownerId ? (
-                  <FormHelperText
-                    sx={{ marginLeft: "1em" }}
-                    error={!!errors.ownerId}
-                  >
-                    {errors.ownerId.message}
-                  </FormHelperText>
-                ) : null}
               </>
             )}
           />
         </DialogContent>
+        <Divider />
         <DialogActions>
           <MuiButton
             variant="outlined"

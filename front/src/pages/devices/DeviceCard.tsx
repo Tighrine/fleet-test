@@ -14,7 +14,7 @@ import type { Device } from "../../shapes/device";
 type DeviceCardProps = {
   device: Device;
   onEdit: (device: Device) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
 };
 
 export const DeviceCard = ({ device, onEdit, onDelete }: DeviceCardProps) => {

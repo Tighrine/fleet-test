@@ -14,7 +14,7 @@ export const useDeviceById = (id: number) => {
   return useQuery({
     queryKey: ['device', id],
     queryFn: () => api.getDeviceById(id),
-    enabled: !!id // Only fetch if id is provided
+    enabled: !!id
   })
 }
 
@@ -37,7 +37,7 @@ export const useCreateDevice = () => {
 export const useUpdateDevice = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Device }) =>
+    mutationFn: ({ id, data }: { id: string; data: Device & { ownerId?: string | null } }) =>
       api.updateDevice(id, data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['devices'] }),
     onError: (error: Error) => {

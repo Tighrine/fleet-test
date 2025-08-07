@@ -10,7 +10,12 @@ export const getDevices = async (_: Request, res: Response) => {
         if (!devices || devices.length === 0) {
             throw new AppError(404, 'No devices found')
         }
-        res.json(devices)
+        res.json(devices.map(device => ({
+            id: device.id,
+            name: device.name,
+            type: device.type,
+            owner: device.owner ?? null
+        })))
     } catch (error) {
         if (error instanceof AppError) {
             return res.status(error.status).json({ message: error.message })

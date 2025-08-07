@@ -13,14 +13,14 @@ export const getDevices = async () => {
 
 export const getDeviceById = async (id: number) => {
   const response = await fetch(`${API}/${id}`);
-    if (!response.ok) {
+  if (!response.ok) {
     const error = await response.json();
     throw new Error(`Network response was not ok: ${error.message}, status: ${response.status}`);
   }
   return response.json();
 }
 
-export const createDevice = async (data: Device) => {
+export const createDevice = async (data: Device & { ownerId?: string | null }) => {
   const response = await fetch(API, {
     method: 'POST',
     headers: {
@@ -35,7 +35,7 @@ export const createDevice = async (data: Device) => {
   return response.json();
 }
 
-export const updateDevice = async (id: string, data: { name: string; type: string }) => {
+export const updateDevice = async (id: string, data: Device & { ownerId?: string | null }) => {
   const response = await fetch(`${API}/${id}`, {
     method: 'PUT',
     headers: {

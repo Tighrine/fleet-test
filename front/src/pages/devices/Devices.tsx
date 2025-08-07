@@ -36,14 +36,14 @@ import DevicesIcon from "@mui/icons-material/Devices";
 import { DeviceCard } from "./DeviceCard";
 import { EmptyState } from "../../components/EmptyState";
 import { showConfirmDialog } from "../../components/confirmation-dialog/store";
+import { useIsMobile } from "../../hooks/useIsMobile";
+import DeviceRow from "./DeviceRow";
 
 function DeviceManagement() {
   const { data: devices, isLoading: isLoadingDevices } = useDevices();
   const { mutate: deleteDevice } = useDeleteDevice();
   const { data: employees, isLoading: isLoadingEmployees } = useEmployees();
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useIsMobile();
 
   const [stateFilters, setStateFilters] = useState({
     type: "none",
@@ -80,7 +80,7 @@ function DeviceManagement() {
     }
     if (stateFilters.ownerId && stateFilters.ownerId !== "none") {
       filtered = filtered.filter(
-        (device: Device) => device.ownerId === stateFilters.ownerId
+        (device: Device) => device.owner?.id === stateFilters.ownerId
       );
     }
     setFilteredDevices(filtered);
@@ -214,85 +214,28 @@ function DeviceManagement() {
             <Table aria-label="Device list">
               <TableHead>
                 <TableRow sx={{ borderBottom: "1px solid #e0e0e0" }}>
-                  <TableCell
-                    sx={{
-                      fontWeight: "bold",
-                      color: "text.secondary",
-                      border: 0,
-                    }}
-                  >
-                    Name
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: "bold",
-                      color: "text.secondary",
-                      border: 0,
-                    }}
-                  >
-                    Type
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: "bold",
-                      color: "text.secondary",
-                      border: 0,
-                    }}
-                  >
-                    Owner
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: "bold",
-                      color: "text.secondary",
-                      border: 0,
-                    }}
-                  >
-                    Actions
-                  </TableCell>
+                  {["Name", "Type", "Owner", "Actions"].map((header) => (
+                    <TableCell
+                      key={header}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "text.secondary",
+                        border: 0,
+                      }}
+                    >
+                      {header}
+                    </TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
-
               {/* 3. Le corps de la table */}
               <TableBody>
-                {filteredDevices.map((device) => (
-                  <TableRow
-                    key={device.id}
-                    sx={{
-                      "&:not(:last-child)": {
-                        borderBottom: "1px solid #e0e0e0",
-                      },
-                      "& td, & th": { border: 0 },
-                    }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {device.name}
-                    </TableCell>
-                    <TableCell>{device.type}</TableCell>
-                    <TableCell>{device.owner?.name ?? "Unassigned"}</TableCell>
-                    <TableCell>
-                      <Box sx={{ display: "flex", gap: 1 }}>
-                        <IconButton
-                          size="small"
-                          aria-label="edit"
-                          onClick={() => {
-                            setSelectedDevice(device);
-                            setAddDeviceDialogOpen(true);
-                          }}
-                        >
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          aria-label="delete"
-                          onClick={() => handleDeleteDevice(device.id!)}
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                <DeviceRow
+                  filteredDevices={filteredDevices}
+                  setSelectedDevice={setSelectedDevice}
+                  setAddDeviceDialogOpen={setAddDeviceDialogOpen}
+                  handleDeleteDevice={handleDeleteDevice}
+                />
               </TableBody>
             </Table>
           </TableContainer>

@@ -6,7 +6,6 @@ export const DeviceSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   type: z.string().min(1, 'Type is required'),
   owner: EmployeeSchema.optional(),
-  ownerId: z.uuid().optional(),
 });
 
 export type Device = z.infer<typeof DeviceSchema>;
