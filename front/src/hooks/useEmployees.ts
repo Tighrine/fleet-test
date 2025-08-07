@@ -1,10 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import * as api from '../api/employees'
+import type { Employee } from '../shapes/employee'
 
 export const useEmployees = () => {
-  return useQuery({
+  return useQuery<Employee[]>({
     queryKey: ['employees'],
-    queryFn: api.getEmployees
+    queryFn: api.getEmployees,
+    retry: false, // Disable automatic retries
   })
 }
 

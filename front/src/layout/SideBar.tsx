@@ -4,46 +4,81 @@ import ComputerIcon from "@mui/icons-material/Computer";
 import { useLocation } from "react-router-dom";
 import NavLink from "../components/NavLink";
 
-const drawerWidth = "17em";
+type DrawerProps = {
+  drawerWidth: string;
+  mobileOpen: boolean;
+  handleDrawerToggle: () => void;
+};
 
-export default function Sidebar() {
+const DrawerContent = () => {
   const location = useLocation();
   const links = [
     { to: "/employees", label: "Employees", icon: <PeopleAltIcon /> },
     { to: "/devices", label: "Devices", icon: <ComputerIcon /> },
   ];
+
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: {
-          width: drawerWidth,
-          boxSizing: "border-box",
-          backgroundColor: "#fafafa",
-        },
-        borderRight: "1px solid rgba(240,240,241,255)",
-      }}
-    >
-      <Box sx={{ padding: 1 }}>
-        <Typography variant="h4" fontWeight="599">
+    <>
+      <Box sx={{ p: 2 }}>
+        <Typography variant="h5" fontWeight="bold">
           Dashboard
         </Typography>
       </Box>
-
       <List>
         {links.map(({ to, label, icon }) => (
           <NavLink
             key={to}
             to={to}
             icon={icon}
-            selected={location.pathname === to}
+            selected={location.pathname.startsWith(to)}
           >
             {label}
           </NavLink>
         ))}
       </List>
-    </Drawer>
+    </>
+  );
+};
+
+export default function Sidebar({
+  drawerWidth,
+  mobileOpen,
+  handleDrawerToggle,
+}: DrawerProps) {
+  return (
+    <Box
+      component="nav"
+      sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+    >
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          display: { xs: "block", md: "none" },
+          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+        }}
+      >
+        <DrawerContent />
+      </Drawer>
+
+      {/* Drawer pour Desktop (permanent) */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          display: { xs: "none", md: "block" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: drawerWidth,
+            borderRight: "1px solid #e0e0e0",
+            backgroundColor: "#fafafa",
+          },
+        }}
+        open
+      >
+        <DrawerContent />
+      </Drawer>
+    </Box>
   );
 }

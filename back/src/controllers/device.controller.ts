@@ -22,7 +22,7 @@ export const getDevices = async (_: Request, res: Response) => {
 export const getDeviceById = async (req: Request, res: Response) => {
     const { id } = req.params
     try {
-        const device = await prisma.device.findUnique({ where: { id: Number(id) }, include: { owner: true } })
+        const device = await prisma.device.findUnique({ where: { id: id! }, include: { owner: true } })
         if (!device) {
             throw new AppError(404, 'Device not found')
         }
@@ -47,6 +47,7 @@ export const createDevice = async (req: Request, res: Response) => {
         if (error instanceof AppError) {
             return res.status(error.status).json({ message: error.message })
         }
+        console.error('Error creating device:', error)
         res.status(500).json({ message: 'Failed to create device', error })
     }
 }
@@ -55,11 +56,11 @@ export const updateDevice = async (req: Request, res: Response) => {
     const { id } = req.params
     const { name, type, ownerId } = req.body
     try {
-        let device = await prisma.device.findUnique({ where: { id: Number(id) } })
+        let device = await prisma.device.findUnique({ where: { id: id! } })
         if (!device) {
             throw new AppError(404, 'Device not found')
         }
-        device = await prisma.device.update({ where: { id: Number(id) }, data: { name, type, ownerId } })
+        device = await prisma.device.update({ where: { id: id! }, data: { name, type, ownerId } })
         res.json(device)
     } catch (error) {
         if (error instanceof AppError) {
@@ -72,11 +73,11 @@ export const updateDevice = async (req: Request, res: Response) => {
 export const deleteDevice = async (req: Request, res: Response) => {
     const { id } = req.params
     try {
-        const device = await prisma.device.findUnique({ where: { id: Number(id) } })
+        const device = await prisma.device.findUnique({ where: { id: id! } })
         if (!device) {
             throw new AppError(404, 'Device not found')
         }
-        await prisma.device.delete({ where: { id: Number(id) } })
+        await prisma.device.delete({ where: { id: id! } })
         res.status(204).send()
     } catch (error) {
         if (error instanceof AppError) {

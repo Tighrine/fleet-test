@@ -1,18 +1,26 @@
+import type { Device } from "../shapes/device";
+
 const API = 'http://localhost:3000/api/devices';
 
 export const getDevices = async () => {
   const response = await fetch(API);
-  if (!response.ok) throw new Error('Network response was not ok, status: ' + response.status);
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Network response was not ok: ${error.message}, status: ${response.status}`);
+  }
   return response.json();
 }
 
 export const getDeviceById = async (id: number) => {
   const response = await fetch(`${API}/${id}`);
-  if (!response.ok) throw new Error('Network response was not ok, status: ' + response.status);
+    if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Network response was not ok: ${error.message}, status: ${response.status}`);
+  }
   return response.json();
 }
 
-export const createDevice = async (data: { name: string; type: string }) => {
+export const createDevice = async (data: Device) => {
   const response = await fetch(API, {
     method: 'POST',
     headers: {
@@ -20,11 +28,14 @@ export const createDevice = async (data: { name: string; type: string }) => {
     },
     body: JSON.stringify(data),
   });
-  if (!response.ok) throw new Error('Network response was not ok');
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Network response was not ok: ${error.message}, status: ${response.status}`);
+  }
   return response.json();
 }
 
-export const updateDevice = async (id: number, data: { name: string; type: string }) => {
+export const updateDevice = async (id: string, data: { name: string; type: string }) => {
   const response = await fetch(`${API}/${id}`, {
     method: 'PUT',
     headers: {
@@ -32,14 +43,20 @@ export const updateDevice = async (id: number, data: { name: string; type: strin
     },
     body: JSON.stringify(data),
   });
-  if (!response.ok) throw new Error('Network response was not ok');
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Network response was not ok: ${error.message}, status: ${response.status}`);
+  }
   return response.json();
 }
 
-export const deleteDevice = async (id: number) => {
+export const deleteDevice = async (id: string) => {
   const response = await fetch(`${API}/${id}`, {
     method: 'DELETE',
   });
-  if (!response.ok) throw new Error('Network response was not ok');
-  return response.json();
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Network response was not ok: ${error.message}, status: ${response.status}`);
+  }
+  return true; // Assuming successful deletion returns true
 }

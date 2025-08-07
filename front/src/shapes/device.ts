@@ -2,10 +2,12 @@ import * as z from 'zod';
 import { EmployeeSchema } from './employee';
 
 export const DeviceSchema = z.object({
-  id: z.string().optional(),
+  id: z.uuid().optional(),
   name: z.string().min(1, 'Name is required'),
   type: z.string().min(1, 'Type is required'),
-  owner: z.union([z.number().int().positive('Owner ID must be a positive integer'), EmployeeSchema]).optional(),
+  owner: EmployeeSchema.optional(),
+  ownerId: z.uuid().optional(),
 });
 
 export type Device = z.infer<typeof DeviceSchema>;
+export const devicesType = ["Laptop", "Desktop", "Tablet", "Phone", "Display", "Printer", "Server", "Network device", "Other"] as const;

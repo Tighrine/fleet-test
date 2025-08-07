@@ -8,10 +8,13 @@ export const getEmployees = async (_: Request, res: Response) => {
     try {
         const employees = await prisma.employee.findMany({ include: { devices: true } })
         if (!employees || employees.length === 0) {
-            return res.status(404).json({ error: 'No employees found' })
+            throw new AppError(404, 'No employees found')
         }
         res.json(employees)
     } catch (error) {
+        if (error instanceof AppError) {
+            return res.status(error.status).json({ message: error.message })
+        }
         res.status(500).json({ message: 'Failed to retrieve employees', error })
     }
 }
@@ -19,7 +22,7 @@ export const getEmployees = async (_: Request, res: Response) => {
 export const getEmployeeById = async (req: Request, res: Response) => {
     const { id } = req.params
     try {
-        const employee = await prisma.employee.findUnique({ where: { id: Number(id) }, include: { devices: true } })
+        const employee = await prisma.employee.findUnique({ where: { id: id! }, include: { devices: true } })
         if (!employee) {
             throw new AppError(404, 'Employee not found')
         }
@@ -46,30 +49,33 @@ export const updateEmployee = async (req: Request, res: Response) => {
     const { id } = req.params
     const { name, role } = req.body
     try {
-        let employee = await prisma.employee.findUnique({ where: { id: Number(id) } })
+        let employee = await prisma.employee.findUnique({ where: { id: id! } })
         if (!employee) {
             throw new AppError(404, 'Employee not found')
         }
-        employee = await prisma.employee.update({ where: { id: Number(id) }, data: { name, role } })
+        employee = await prisma.employee.update({ where: { id: id! }, data: { name, role } })
         res.json(employee)
     } catch (error) {
+        if (error instanceof AppError) {
+            return res.status(error.status).json({ message: error.message })
+        }
         res.status(500).json({ message: 'Failed to update employee', error })
     }
 }
 
 export const deleteEmployee = async (req: Request, res: Response) => {
     const { id } = req.params
-    if (!id) {
-        return res.status(400).json({ error: 'Employee ID is required' })
-    }
     try {
-        const employee = await prisma.employee.findUnique({ where: { id: Number(id) } })
+        const employee = await prisma.employee.findUnique({ where: { id: id! } })
         if (!employee) {
-            throw new Error('Employee not found')
+            throw new AppError(404, 'Employee not found')
         }
-        await prisma.employee.delete({ where: { id: Number(id) } })
+        await prisma.employee.delete({ where: { id: id! } })
         res.json({ message: 'Employee deleted successfully' })
     } catch (error) {
+        if (error instanceof AppError) {
+            return res.status(error.status).json({ message: error.message })
+        }
         return res.status(500).json({ message: 'Failed to delete employee', error })
     }
 }

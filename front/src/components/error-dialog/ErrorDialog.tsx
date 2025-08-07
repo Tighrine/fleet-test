@@ -1,5 +1,5 @@
-import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react';
+import CloseIcon from "@mui/icons-material/Close";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -9,10 +9,9 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  SlideTransition,
   Typography,
-} from 'ui/core';
-import { closeErrorDialog, useErrorDialog } from './store';
+} from "@mui/material";
+import { closeErrorDialog, useErrorDialog } from "./store";
 
 const ErrorDialog = () => {
   const error = useErrorDialog();
@@ -27,18 +26,16 @@ const ErrorDialog = () => {
   };
 
   return (
-    <Dialog
-      TransitionComponent={SlideTransition}
-      open={Boolean(error?.errorMessage)}
-    >
+    <Dialog open={Boolean(error?.errorMessage)}>
       <DialogTitle
+        variant="h6"
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
-        <Typography variant="titleM">{error?.title}</Typography>
+        <Box>{error?.title}</Box>
         <IconButton onClick={handleClose}>
           <CloseIcon />
         </IconButton>
@@ -46,7 +43,7 @@ const ErrorDialog = () => {
       <DialogContent>
         <Typography variant="body1">
           {error?.errorMessage ??
-            'An error occurred with the performed action.'}
+            "An error occurred with the performed action."}
         </Typography>
 
         <Box sx={{ mt: 2 }}>
@@ -54,14 +51,14 @@ const ErrorDialog = () => {
             variant="contained"
             onClick={handleToggleDetails}
             sx={{
-              backgroundColor: '#e3e6fd',
-              color: '#000',
-              textTransform: 'none',
-              borderRadius: '8px',
-              '&:hover': { backgroundColor: '#c5ccfa' },
+              backgroundColor: "#e3e6fd",
+              color: "#000",
+              textTransform: "none",
+              borderRadius: "8px",
+              "&:hover": { backgroundColor: "#c5ccfa" },
             }}
           >
-            {showDetails ? 'Hide details' : 'View details'}
+            {showDetails ? "Hide details" : "View details"}
           </Button>
         </Box>
 
@@ -70,16 +67,16 @@ const ErrorDialog = () => {
             sx={{
               mt: 2,
               p: 2,
-              bgcolor: '#f0f1f6',
-              borderRadius: '8px',
+              bgcolor: "#f0f1f6",
+              borderRadius: "8px",
               maxHeight: 150,
-              overflowY: 'auto',
+              overflowY: "auto",
             }}
           >
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
               Error details
             </Typography>
-            <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
+            <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>
               {error?.errorDetailMessage}
             </Typography>
           </Box>
@@ -89,8 +86,8 @@ const ErrorDialog = () => {
         <Button
           onClick={handleClose}
           sx={{
-            textTransform: 'none',
-            color: '#616161',
+            textTransform: "none",
+            color: "#616161",
           }}
         >
           Close
