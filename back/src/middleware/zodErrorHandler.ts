@@ -15,5 +15,5 @@ export const zodErrorHandler = (
     });
   }
 
-  next(err); // passe aux autres gestionnaires d'erreurs
+  next(err);
 }
