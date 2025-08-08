@@ -1,3 +1,5 @@
+import type { Employee } from "../shapes/employee";
+
 const API = 'http://localhost:3000/api/employees'
 
 export const getEmployees = async () => {
@@ -18,7 +20,7 @@ export const getEmployeeById = async (id: string) => {
   return response.json();
 }
 
-export const createEmployee = async (data: { name: string; role: string }) => {
+export const createEmployee = async (data: Employee) => {
   const response = await fetch(API, {
     method: 'POST',
     headers: {
@@ -33,7 +35,7 @@ export const createEmployee = async (data: { name: string; role: string }) => {
   return response.json();
 }
 
-export const updateEmployee = async (id: string, data: { name: string; role: string }) => {
+export const updateEmployee = async (id: string, data: Employee) => {
   const response = await fetch(`${API}/${id}`, {
     method: 'PUT',
     headers: {

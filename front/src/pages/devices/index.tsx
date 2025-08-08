@@ -9,14 +9,9 @@ import Button from "../../components/Button";
 import { UpsertDeviceDialog } from "./UpsertDeviceDialog";
 
 import {
-  Box,
-  IconButton,
   MenuItem,
   Select,
   Stack,
-  TextField,
-  useMediaQuery,
-  useTheme,
   TableCell,
   Table,
   TableHead,
@@ -29,8 +24,6 @@ import {
 import Loading from "../../components/Loading";
 import Container from "../../components/Container";
 
-import EditIcon from "@mui/icons-material/EditOutlined";
-import DeleteIcon from "@mui/icons-material/DeleteOutline";
 import AddIcon from "@mui/icons-material/Add";
 import DevicesIcon from "@mui/icons-material/Devices";
 import { DeviceCard } from "./DeviceCard";
@@ -49,7 +42,7 @@ function DeviceManagement() {
 
   const [stateFilters, setStateFilters] = useState({
     type: "none",
-    ownerId: "none",
+    ownerId: "",
     searchTerm: "",
   });
   const [filteredDevices, setFilteredDevices] = useState(devices || []);
@@ -80,7 +73,9 @@ function DeviceManagement() {
           stateFilters.type.toLocaleLowerCase()
       );
     }
-    if (stateFilters.ownerId && stateFilters.ownerId !== "none") {
+    if (stateFilters.ownerId === "none") {
+      filtered = filtered.filter((device: Device) => !device.owner);
+    } else if (stateFilters.ownerId && stateFilters.ownerId !== "") {
       filtered = filtered.filter(
         (device: Device) => device.owner?.id === stateFilters.ownerId
       );
@@ -154,10 +149,13 @@ function DeviceManagement() {
           >
             <MenuItem
               sx={{ height: "37px", color: "textDisabled" }}
-              value="none"
+              value=""
               aria-placeholder="Select Owner"
             >
               <Typography color="textDisabled">Select Owner</Typography>
+            </MenuItem>
+            <MenuItem value="none" aria-placeholder="unassigned device">
+              <Typography>Unassigned</Typography>
             </MenuItem>
             {employees?.map(({ id, name }) => (
               <MenuItem key={id} value={id}>
