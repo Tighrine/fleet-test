@@ -1,0 +1,11 @@
+version: '3'
+services:
+  pgdb:
+    image: 'postgres'
+    restart: "always"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: r2d2z6po
+      POSTGRES_DB: postgres
+    ports:
+      - 5450:5432

@@ -38,6 +38,8 @@ import { EmptyState } from "../../components/EmptyState";
 import { showConfirmDialog } from "../../components/confirmation-dialog/store";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import DeviceRow from "./DeviceRow";
+import CustomTextField from "../../components/CustomTextField";
+import { CustomFormControl } from "../../components/CustomFromControl";
 
 function DeviceManagement() {
   const { data: devices, isLoading: isLoadingDevices } = useDevices();
@@ -106,13 +108,10 @@ function DeviceManagement() {
         alignItems="center"
         sx={{ my: 4 }}
       >
-        <TextField
+        <CustomTextField
           placeholder="Device Name"
           variant="outlined"
           size="small"
-          sx={{
-            "& .MuiOutlinedInput-root": { borderRadius: "8px" },
-          }}
           value={stateFilters.searchTerm}
           onChange={(e) => {
             setStateFilters((prev) => ({
@@ -121,56 +120,52 @@ function DeviceManagement() {
             }));
           }}
         />
-        <Select
-          value={stateFilters.type}
-          onChange={(e) => {
-            setStateFilters((prev) => ({ ...prev, type: e.target.value }));
-          }}
-          displayEmpty
-          size="small"
-          sx={{
-            minWidth: 200,
-            "& .MuiOutlinedInput-root": { borderRadius: "8px" },
-          }}
-        >
-          <MenuItem
-            sx={{ height: "37px" }}
-            value="none"
-            aria-placeholder="Select Type"
+        <CustomFormControl>
+          <Select
+            value={stateFilters.type}
+            onChange={(e) => {
+              setStateFilters((prev) => ({ ...prev, type: e.target.value }));
+            }}
+            displayEmpty
+            size="small"
           >
-            <Typography color="textDisabled">Select Type</Typography>
-          </MenuItem>
-          {devicesType.map((deviceType) => (
-            <MenuItem key={deviceType} value={deviceType}>
-              {deviceType}
+            <MenuItem
+              sx={{ height: "37px" }}
+              value="none"
+              aria-placeholder="Select Type"
+            >
+              <Typography color="textDisabled">Select Type</Typography>
             </MenuItem>
-          ))}
-        </Select>
-        <Select
-          value={stateFilters.ownerId}
-          onChange={(e) => {
-            setStateFilters((prev) => ({ ...prev, ownerId: e.target.value }));
-          }}
-          displayEmpty
-          size="small"
-          sx={{
-            minWidth: 200,
-            "& .MuiOutlinedInput-root": { borderRadius: "8px" },
-          }}
-        >
-          <MenuItem
-            sx={{ height: "37px", color: "textDisabled" }}
-            value="none"
-            aria-placeholder="Select Owner"
+            {devicesType.map((deviceType) => (
+              <MenuItem key={deviceType} value={deviceType}>
+                {deviceType}
+              </MenuItem>
+            ))}
+          </Select>
+        </CustomFormControl>
+        <CustomFormControl>
+          <Select
+            value={stateFilters.ownerId}
+            onChange={(e) => {
+              setStateFilters((prev) => ({ ...prev, ownerId: e.target.value }));
+            }}
+            displayEmpty
+            size="small"
           >
-            <Typography color="textDisabled">Select Owner</Typography>
-          </MenuItem>
-          {employees?.map(({ id, name }) => (
-            <MenuItem key={id} value={id}>
-              {name}
+            <MenuItem
+              sx={{ height: "37px", color: "textDisabled" }}
+              value="none"
+              aria-placeholder="Select Owner"
+            >
+              <Typography color="textDisabled">Select Owner</Typography>
             </MenuItem>
-          ))}
-        </Select>
+            {employees?.map(({ id, name }) => (
+              <MenuItem key={id} value={id}>
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </CustomFormControl>
         <Button
           onClick={() => {
             setAddDeviceDialogOpen(true);
@@ -228,7 +223,6 @@ function DeviceManagement() {
                   ))}
                 </TableRow>
               </TableHead>
-              {/* 3. Le corps de la table */}
               <TableBody>
                 <DeviceRow
                   filteredDevices={filteredDevices}

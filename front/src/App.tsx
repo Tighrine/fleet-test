@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
-import EmployeesPage from "./pages/employees/Employees";
-import DevicesPage from "./pages/devices/Devices";
+import EmployeesPage from "./pages/employees";
+import DevicesPage from "./pages/devices";
 
 function App() {
   return (

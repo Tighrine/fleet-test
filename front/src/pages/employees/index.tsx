@@ -23,6 +23,7 @@ import { useIsMobile } from "../../hooks/useIsMobile";
 import { showConfirmDialog } from "../../components/confirmation-dialog/store";
 import EmployeeRow from "./EmployeeRow";
 import EmployeeCard from "./EmployeeCard";
+import CustomTextField from "../../components/CustomTextField";
 
 const EmployeesPage = () => {
   const { data: employees, isLoading: isLoadingEmployees } = useEmployees();
@@ -73,13 +74,10 @@ const EmployeesPage = () => {
         alignItems="center"
         sx={{ my: 4 }}
       >
-        <TextField
+        <CustomTextField
           placeholder="Employee Name"
           variant="outlined"
           size="small"
-          sx={{
-            "& .MuiOutlinedInput-root": { borderRadius: "8px" },
-          }}
           value={stateFilters.name}
           onChange={(e) => {
             setStateFilters((prev) => ({
@@ -88,13 +86,10 @@ const EmployeesPage = () => {
             }));
           }}
         />
-        <TextField
+        <CustomTextField
           placeholder="Employee role"
           variant="outlined"
           size="small"
-          sx={{
-            "& .MuiOutlinedInput-root": { borderRadius: "8px" },
-          }}
           value={stateFilters.role}
           onChange={(e) => {
             setStateFilters((prev) => ({

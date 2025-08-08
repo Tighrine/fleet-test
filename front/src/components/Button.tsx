@@ -12,7 +12,7 @@ function Button({ onClick, name, startIcon, endIcon, ...props }: ButtonProps) {
       sx={{
         backgroundColor: "black",
         color: "white",
-        borderRadius: "8px",
+        borderRadius: "6.5px",
         textTransform: "none",
         px: 3,
         py: 1,

@@ -3,6 +3,7 @@ import { styled } from "@mui/material/styles";
 
 const CustomTextField = styled(TextField)({
   "& .MuiOutlinedInput-root": {
+    borderRadius: "6.5px",
     "& .MuiOutlinedInput-notchedOutline": {
       borderColor: "lightgray",
     },
