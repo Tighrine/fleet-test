@@ -26,8 +26,6 @@ In the `sql` folder there is a `docker-compose.yml` file.
 cd sql
 docker-compose up -d
 
-```bash
 npm install
 
-```bash
 node prediction.js
